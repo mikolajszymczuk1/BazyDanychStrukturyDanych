@@ -16,7 +16,7 @@ void findDividers(long long number, long long start, long long end);
 int main() {
   auto start = std::chrono::high_resolution_clock::now();
 
-  long long n = 12534565234;
+  long long n = 1253456526;
   std::vector<std::thread> threads;
   int threadsCount = std::thread::hardware_concurrency();
   std::cout << "Number of hardware threads: " << threadsCount << std::endl;
@@ -30,7 +30,6 @@ int main() {
     long long start = i * chunkSize + 1;
     long long end = std::min((i + 1) * chunkSize, n);
     threads.push_back(std::thread(findDividers, n, start, end));
-    std::unique_lock<std::mutex> lock(mtx);
   }
 
   // Wait for all threads
@@ -42,8 +41,13 @@ int main() {
 
   // Calculate program running time
   auto stop = std::chrono::high_resolution_clock::now();
-  auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
-  std::cout << "Total time: " << duration.count() << "s" << std::endl;
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+  std::cout << "Total time: " << duration.count() << "ms" << std::endl;
+
+  // Print all dividers
+  for (int i = 0; i < dividers.size(); i++) {
+    std::cout << dividers[i] << " | ";
+  }
 
   return 0;
 }
@@ -53,7 +57,7 @@ int main() {
 void findDividers(long long number, long long start, long long end) {
   for (unsigned long long i = start; i < end && !found; i++) {
     if (number % i == 0) {
-      std::lock_guard<std::mutex> guard(mtx);
+      mtx.lock();
       dividers.push_back(i);
 
       if (number / i != i) {
@@ -63,6 +67,7 @@ void findDividers(long long number, long long start, long long end) {
       if (dividers.size() >= 100) {
         found = true;
       }
+      mtx.unlock();
     }
   }
 }
