@@ -58,5 +58,7 @@
 ### Compiler out products ###
 example
 example.sh
+numberDividers
+numberDividers.sh
 
 # End of https://www.toptal.com/developers/gitignore/api/c++,visualstudiocode
