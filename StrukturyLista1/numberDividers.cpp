@@ -1,12 +1,11 @@
 #include <iostream>
 #include <thread>
 #include <vector>
-#include <atomic>
 #include <chrono>
 #include <mutex>
 
 std::mutex mtx;
-std::atomic<bool> found = false;
+bool found = false;
 std::vector<long long> dividers;
 
 // Function that find all dividers
