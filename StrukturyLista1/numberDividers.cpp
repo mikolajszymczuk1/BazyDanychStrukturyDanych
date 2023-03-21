@@ -15,13 +15,13 @@ void findDividers(long long number, long long start, long long end);
 int main() {
   auto start = std::chrono::high_resolution_clock::now();
 
-  long long n = 1253456526;
+  long long n = 125345654533;
   std::vector<std::thread> threads;
   int threadsCount = std::thread::hardware_concurrency();
   std::cout << "Number of hardware threads: " << threadsCount << std::endl;
 
   // Calculate chunk size for each thread
-  long long chunkSize = (n + threadsCount - 1) / threadsCount;
+  long long chunkSize = ((n / 2) + threadsCount - 1) / threadsCount;
   std::cout << "Single chunk size: " << chunkSize << std::endl;
 
   // Create threads
@@ -58,10 +58,6 @@ void findDividers(long long number, long long start, long long end) {
     if (number % i == 0) {
       mtx.lock();
       dividers.push_back(i);
-
-      if (number / i != i) {
-        dividers.push_back(number / i);
-      }
 
       if (dividers.size() >= 100) {
         found = true;
